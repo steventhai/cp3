@@ -2,105 +2,94 @@ import java.io.*;
 import java.util.InputMismatchException;
 
 /**
- * Brute force solution.
+ * TODO
  * 
- * https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=24&page=show_problem&problem=1796
+ * https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=24&page=show_problem&problem=1861
+ * 
+ * Note: find which square, position is on ( (2k - 1)^2 < position <= (2k + 1)^2);
+ * - position will be on the square with length: 2K + 1.
  */
-class RotatedSquare {
-
-    private static final int MAX = 100002;
+class SpiralTap {
 
     public static void main(String[] args) throws Throwable {
 
-        InputReader in = new InputReader(System.in);
-        OutputWriter out = new OutputWriter(System.out);
+        // InputReader in = new InputReader(System.in);
+        // OutputWriter out = new OutputWriter(System.out);
 
-        // InputReader in = new InputReader(new FileInputStream("RotatedSquare.inp"));
-        // OutputWriter out = new OutputWriter(new FileOutputStream("RotatedSquare.out"));
+        InputReader in = new InputReader(new FileInputStream("SpiralTap.inp"));
+        OutputWriter out = new OutputWriter(new FileOutputStream("SpiralTap.out"));
 
-        int largeSize = in.readInt();
-        int smallSize = in.readInt();
+        int size = in.readInt();
+        long position = in.readLong();
 
-        while (largeSize != 0 && smallSize != 0) {
-            char[][] large = new char[largeSize][largeSize];
-            char[][] small = new char[smallSize][smallSize];
+        while (size != 0 && position != 0) {
 
-            for (int i = 0; i < largeSize; i++) {
-                large[i] = in.readString().toCharArray();
+            long k = 0;
+
+            while (position <= (2 * k + 1) * (2 * k + 1))
+                k++;
+
+            long x = 2 * k + 1;
+            long y = x;
+            long topRight = x * y;
+            long length = x - 1;
+
+            // down.
+            for (int i = 0; i < length; i++) {
+
+                if (topRight == position) {
+                    break;
+                }
+
+                x--;
+                topRight--;
             }
 
-            for (int i = 0; i < smallSize; i++) {
-                small[i] = in.readString().toCharArray();
+            // left.
+            for (int i = 0; i < length; i++) {
+
+                if (topRight == position) {
+                    break;
+                }
+
+                y--;
+                topRight--;
+            }
+
+            // up
+            for (int i = 0; i < length; i++) {
+
+                if (topRight == position) {
+                    break;
+                }
+
+                x++;
+                topRight--;
+            }
+
+            // right
+            for (int i = 0; i < length; i++) {
+
+                if (topRight == position) {
+                    break;
+                }
+
+                y++;
+                topRight--;
             }
 
             StringBuilder strBuilder = new StringBuilder();
-            for (int i = 0; i < 4; i++) {
-                int result = findSmallInLarge(small, large);
-                rotate(small);
-
-                if (i != 0) {
-                    strBuilder.append(' ').append(result);
-                } else {
-                    strBuilder.append(result);
-                }
-            }
+            strBuilder.append("Line = ").append(x + 1).append(", column = ").append(y + 1).append('.');
 
             // Output.
             out.printLine(strBuilder.toString());
 
-            largeSize = in.readInt();
-            smallSize = in.readInt();
+            size = in.readInt();
+            position = in.readLong();
         }
 
         out.flush();
         out.close();
-    }
-
-    private static void rotate(char[][] small) {
-        // Rotate in-place 90 degrees clockwise.
-        int length = small.length - 1;
-        for (int i = 0; i <= length / 2; i++) {
-            for (int j = i; j < length - i; j++) {
-                char temp = small[i][j];
-                small[i][j] = small[length - j][i];
-                small[length - j][i] = small[length - i][length - j];
-                small[length - i][length - j] = small[j][length - i];
-                small[j][length - i] = temp;
-            }
-        }
-    }
-
-    private static int  findSmallInLarge(char[][] small, char[][] large) {
-        int count = 0;
-        boolean found = true;
-        int largeSize = large.length;
-        int smallSize = small.length;
-        int length = largeSize - smallSize + 1;
-
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < length; j++) {
-                
-                if (large[i][j] == small[0][0]) {
-
-                    found = true;
-
-                    for (int k = 0; k < smallSize; k++) {
-                        for (int l = 0; l < smallSize;l++) {
-                            if (small[k][l] != large[i + k][j + l]) {
-                                found = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (found) {
-                        count++;
-                    }
-                }
-            }
-        }
-
-        return count;
     }
 
     //FAST IO
