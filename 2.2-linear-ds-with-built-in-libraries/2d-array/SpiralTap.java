@@ -2,8 +2,6 @@ import java.io.*;
 import java.util.InputMismatchException;
 
 /**
- * TODO
- * 
  * https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=24&page=show_problem&problem=1861
  * 
  * Note: find which square, position is on ( (2k - 1)^2 < position <= (2k + 1)^2);
@@ -13,11 +11,11 @@ class SpiralTap {
 
     public static void main(String[] args) throws Throwable {
 
-        // InputReader in = new InputReader(System.in);
-        // OutputWriter out = new OutputWriter(System.out);
+        InputReader in = new InputReader(System.in);
+        OutputWriter out = new OutputWriter(System.out);
 
-        InputReader in = new InputReader(new FileInputStream("SpiralTap.inp"));
-        OutputWriter out = new OutputWriter(new FileOutputStream("SpiralTap.out"));
+        // InputReader in = new InputReader(new FileInputStream("SpiralTap.inp"));
+        // OutputWriter out = new OutputWriter(new FileOutputStream("SpiralTap.out"));
 
         int size = in.readInt();
         long position = in.readLong();
@@ -26,13 +24,13 @@ class SpiralTap {
 
             long k = 0;
 
-            while (position <= (2 * k + 1) * (2 * k + 1))
+            while (position > (2 * k + 1) * (2 * k + 1))
                 k++;
 
-            long x = 2 * k + 1;
+            long x = (2 * k + size + 2) / 2;
             long y = x;
-            long topRight = x * y;
-            long length = x - 1;
+            long topRight = (2 * k + 1) * (2 * k + 1);
+            long length = 2 * k;
 
             // down.
             for (int i = 0; i < length; i++) {
@@ -79,7 +77,7 @@ class SpiralTap {
             }
 
             StringBuilder strBuilder = new StringBuilder();
-            strBuilder.append("Line = ").append(x + 1).append(", column = ").append(y + 1).append('.');
+            strBuilder.append("Line = ").append(x).append(", column = ").append(y).append('.');
 
             // Output.
             out.printLine(strBuilder.toString());
