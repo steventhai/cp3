@@ -3,50 +3,64 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.InputMismatchException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * 11933 - Splitting Numbers
+ * 11988 - Broken Keyboard (a.k.a. Beiju Text)
  * 
- * https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=24&page=show_problem&problem=3084
+ * https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=24&page=show_problem&problem=3139
  */
-class SplittingNumber {
+class BrokenKeyboard {
 
     public static void main(String[] args) throws Throwable {
 
-        InputReader in = new InputReader(System.in);
-        OutputWriter out = new OutputWriter(System.out);
+        // InputReader in = new InputReader(System.in);
+        // BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        // OutputWriter out = new OutputWriter(System.out);
 
-        // InputReader in = new InputReader(new FileInputStream("SplittingNumber.inp"));
-        // OutputWriter out = new OutputWriter(new FileOutputStream("SplittingNumber.out"));
+        // InputReader in = new InputReader(new FileInputStream("BrokenKeyboard.inp"));
+        BufferedReader bufferedReader = new BufferedReader(new FileReader("BrokenKeyboard.inp"));
+        OutputWriter out = new OutputWriter(new FileOutputStream("BrokenKeyboard.out"));
 
-        int n = in.readInt(); // the integer n.
+        String line = bufferedReader.readLine();
 
-        while (n != 0) {
-            int a = 0;
-            int b = 0;
-            int j = n & -n;
-            int count = 0;
-            
-            while (a + b != n) {
-                int temp = n & j;
-                if (temp != 0) {
-                    count++;
+        while (line != null) {
+
+            LinkedList<Character> list = new LinkedList<>();
+
+            int i = 0;
+            int index = 0;
+            char flag = '#';
+            while (i < line.length()) {
+                char current = line.charAt(i);
+
+                if (current == '[') {
+                    flag = '[';
+                    index = 0;
+                    i++;
+                    continue;
+                } else if (current == ']') {
+                    flag = ']';
+                    i++;
+                    continue;
                 }
 
-                if (count % 2 != 0) {
-                    a += temp;
+                if (flag == '[') {
+                    list.add(index++, current);
                 } else {
-                    b += temp;
+                    list.add(current);
                 }
 
-                j *= 2;
+                i++;
             }
 
             // Output.
-            out.printLine(a, b);
+            // out.printLine(String.join("", list));
+            out.printLine(list.stream().map(Object::toString).collect(Collectors.joining()));
 
-            n = in.readInt();
+            line = bufferedReader.readLine();
         }
 
         out.flush();
